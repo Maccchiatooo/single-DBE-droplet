@@ -1,4 +1,4 @@
-KOKKOS_PATH = ${HOME}/Kokkos/kokkos
+KOKKOS_PATH = grand/IMEXLBM/czhao/Kokkos/kokkos
 KOKKOS_DEVICES = Cuda,OpenMP
 EXE_NAME = "LBM"
 
