@@ -12,7 +12,7 @@ void System::Initialize()
     this->sigma = 2.187 * 0.001;
     this->delta = 4;
     this->kappa = this->beta * this->delta * this->delta / 8 * (this->rho0 - this->rho1) * (this->rho0 - this->rho1);
-    this->R = 0.1 * this->sy;
+    this->R = 0.25 * this->sy;
     this->Time = 100000;
     this->inter = 10000;
     this->tau = 0.5;
