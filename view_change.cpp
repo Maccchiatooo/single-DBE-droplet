@@ -39,29 +39,29 @@ void LBM::setup_subdomain()
 };
 void LBM::pack()
 {
-    if (x_lo != 0)
+    //if (x_lo != 0)
         Kokkos::deep_copy(m_leftout, Kokkos::subview(f, Kokkos::ALL, std::make_pair(ghost, 2*ghost), Kokkos::ALL));
 
-    if (x_hi !=glx)
+    //if (x_hi !=glx)
         Kokkos::deep_copy(m_rightout, Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-2*ghost, lx-ghost), Kokkos::ALL));
     
-    if (y_lo != 0)
+    //if (y_lo != 0)
         Kokkos::deep_copy(m_downout, Kokkos::subview(f, Kokkos::ALL,  Kokkos::ALL,std::make_pair(ghost, 2*ghost)));
 
-    if (y_hi !=gly)
+    //if (y_hi !=gly)
         Kokkos::deep_copy(m_upout, Kokkos::subview(f, Kokkos::ALL,  Kokkos::ALL,std::make_pair(ly-2*ghost, ly-ghost)));
 
 
-    if (x_lo != 0&&y_lo!=0)
+    //if (x_lo != 0&&y_lo!=0)
         Kokkos::deep_copy(m_leftdownout, Kokkos::subview(f, Kokkos::ALL, std::make_pair(ghost, 2*ghost), std::make_pair(ghost, 2*ghost)));
 
-    if (x_hi !=glx&&y_lo!=0)
+    //if (x_hi !=glx&&y_lo!=0)
         Kokkos::deep_copy(m_rightdownout, Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-2*ghost, lx-ghost), std::make_pair(ghost, 2*ghost)));
     
-    if (x_lo!=0&&y_hi != gly)
+    //if (x_lo!=0&&y_hi != gly)
         Kokkos::deep_copy(m_leftupout, Kokkos::subview(f, Kokkos::ALL,  std::make_pair(ghost, 2*ghost),std::make_pair(ly-2*ghost, ly-ghost)));
 
-    if (x_hi!=glx&&y_hi !=gly)
+    //if (x_hi!=glx&&y_hi !=gly)
         Kokkos::deep_copy(m_rightupout, Kokkos::subview(f, Kokkos::ALL,  std::make_pair(lx-2*ghost, lx-ghost),std::make_pair(ly-2*ghost, ly-ghost)));
 };
 
@@ -69,32 +69,32 @@ void LBM::exchange()
 {
     int mar = 1;
 
-    if (x_lo != 0)
+    //if (x_lo != 0)
         MPI_Send(m_leftout.data(), m_leftout.size(), MPI_DOUBLE, comm.left, mar, comm.comm);
 
-    if (x_hi != glx)
+    //if (x_hi != glx)
         MPI_Recv(m_right.data(), m_right.size(), MPI_DOUBLE, comm.right, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 2;
-    if (x_hi != glx)
+    //if (x_hi != glx)
         MPI_Send(m_rightout.data(), m_rightout.size(), MPI_DOUBLE, comm.right, mar, comm.comm);
 
-    if (x_lo != 0)
+    //if (x_lo != 0)
         MPI_Recv(m_left.data(),m_left.size(), MPI_DOUBLE, comm.left, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 3;
 
-    if (y_lo != 0)
+    //if (y_lo != 0)
         MPI_Send(m_downout.data(), m_downout.size(), MPI_DOUBLE, comm.down, mar, comm.comm);
 
-    if (y_hi != gly)
+    //if (y_hi != gly)
         MPI_Recv(m_up.data(), m_up.size(), MPI_DOUBLE, comm.up, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 4;
-    if (y_hi != gly)
+    //if (y_hi != gly)
         MPI_Send(m_upout.data(), m_upout.size(), MPI_DOUBLE, comm.up, mar, comm.comm);
 
-    if (y_lo != 0)
+    //if (y_lo != 0)
         MPI_Recv(m_down.data(),m_down.size(), MPI_DOUBLE, comm.down, mar, comm.comm, MPI_STATUSES_IGNORE);
 
 
@@ -102,32 +102,32 @@ void LBM::exchange()
 
     mar = 5;
 
-    if (x_lo != 0&&y_lo!=0)
+    //if (x_lo != 0&&y_lo!=0)
         MPI_Send(m_leftdownout.data(), m_leftdownout.size(), MPI_DOUBLE, comm.leftdown, mar, comm.comm);
 
-    if (x_hi != glx&&y_hi!=gly)
+    //if (x_hi != glx&&y_hi!=gly)
         MPI_Recv(m_rightup.data(), m_rightup.size(), MPI_DOUBLE, comm.rightup, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 6;
-    if (x_hi != glx&&y_lo!=0)
+    //if (x_hi != glx&&y_lo!=0)
         MPI_Send(m_rightdownout.data(), m_rightdownout.size(), MPI_DOUBLE, comm.rightdown, mar, comm.comm);
 
-    if (x_lo != 0&&y_hi!=gly)
+    //if (x_lo != 0&&y_hi!=gly)
         MPI_Recv(m_leftup.data(),m_leftup.size(), MPI_DOUBLE, comm.leftup, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 7;
 
-    if (x_hi!=glx&&y_hi != gly)
+    //if (x_hi!=glx&&y_hi != gly)
         MPI_Send(m_rightupout.data(), m_rightupout.size(), MPI_DOUBLE, comm.rightup, mar, comm.comm);
 
-    if (x_lo!=0&&y_lo != 0)
+    //if (x_lo!=0&&y_lo != 0)
         MPI_Recv(m_leftdown.data(), m_leftdown.size(), MPI_DOUBLE, comm.leftdown, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 8;
-    if (x_lo!=0&&y_hi != gly)
+    //if (x_lo!=0&&y_hi != gly)
         MPI_Send(m_leftupout.data(), m_leftupout.size(), MPI_DOUBLE, comm.leftup, mar, comm.comm);
 
-    if (x_hi!=glx&&y_lo != 0)
+    //if (x_hi!=glx&&y_lo != 0)
         MPI_Recv(m_rightdown.data(),m_rightdown.size(), MPI_DOUBLE, comm.rightdown, mar, comm.comm, MPI_STATUSES_IGNORE);
 
   
@@ -136,29 +136,29 @@ void LBM::exchange()
 
 void LBM::unpack()
 {
-    if (x_lo != 0){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(0, ghost), Kokkos::ALL), m_left);}
+    //if (x_lo != 0){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(0, ghost), Kokkos::ALL), m_left);
 
-    if (x_hi != glx ){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-ghost, lx), Kokkos::ALL), m_right);}
+    //if (x_hi != glx ){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-ghost, lx), Kokkos::ALL), m_right);
 
-    if (y_lo != 0){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, Kokkos::ALL, std::make_pair(0, ghost)), m_down);}
+    //if (y_lo != 0){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, Kokkos::ALL, std::make_pair(0, ghost)), m_down);
 
-    if (y_hi != gly ){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, Kokkos::ALL, std::make_pair(ly-ghost, ly)), m_up);}
+    //if (y_hi != gly ){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, Kokkos::ALL, std::make_pair(ly-ghost, ly)), m_up);
 
-    if (x_lo != 0&&y_lo!=0){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(0, ghost), std::make_pair(0, ghost)), m_leftdown);}
+    //if (x_lo != 0&&y_lo!=0){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(0, ghost), std::make_pair(0, ghost)), m_leftdown);
 
-    if (x_hi != glx&&y_lo!=0 ){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-ghost, lx), std::make_pair(0, ghost)), m_rightdown);}
+    //if (x_hi != glx&&y_lo!=0 ){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-ghost, lx), std::make_pair(0, ghost)), m_rightdown);
 
-    if (x_lo!=0&&y_hi != gly){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(0, ghost), std::make_pair(ly-ghost, ly)), m_leftup);}
+    //if (x_lo!=0&&y_hi != gly){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(0, ghost), std::make_pair(ly-ghost, ly)), m_leftup);
 
-    if (x_hi!=glx&&y_hi != gly ){
-        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-ghost, lx), std::make_pair(ly-ghost, ly)), m_rightup);}
+    //if (x_hi!=glx&&y_hi != gly ){
+        Kokkos::deep_copy(Kokkos::subview(f, Kokkos::ALL, std::make_pair(lx-ghost, lx), std::make_pair(ly-ghost, ly)), m_rightup);
 
 };
 
@@ -208,30 +208,30 @@ void LBM::u_pack(Kokkos::View<double **,Kokkos::CudaUVMSpace> u)
 {
 
 
-    if (x_lo != 0)
+    //if (x_lo != 0)
         Kokkos::deep_copy(u_leftout, Kokkos::subview(u, std::make_pair(ghost, 2*ghost), Kokkos::ALL));
 
-    if (x_hi !=glx)
+    //if (x_hi !=glx)
         Kokkos::deep_copy(u_rightout, Kokkos::subview(u,  std::make_pair(lx-2*ghost, lx-ghost), Kokkos::ALL));
 
-    if (y_lo != 0){
+    //if (y_lo != 0){
         Kokkos::deep_copy(u_downout, Kokkos::subview(u, Kokkos::ALL, std::make_pair(ghost, 2 * ghost)));
-    }
 
-    if (y_hi !=gly)
+
+    //if (y_hi !=gly)
         Kokkos::deep_copy(u_upout, Kokkos::subview(u,  Kokkos::ALL,std::make_pair(ly-2*ghost, ly-ghost)));
 
 
-    if (x_lo != 0&&y_lo!=0)
+    //if (x_lo != 0&&y_lo!=0)
         Kokkos::deep_copy(u_leftdownout, Kokkos::subview(u,  std::make_pair(ghost, 2*ghost), std::make_pair(ghost, 2*ghost)));
 
-    if (x_hi !=glx&&y_lo!=0)
+    //if (x_hi !=glx&&y_lo!=0)
         Kokkos::deep_copy(u_rightdownout, Kokkos::subview(u, std::make_pair(lx-2*ghost, lx-ghost), std::make_pair(ghost, 2*ghost)));
     
-    if (x_lo!=0&&y_hi != gly)
+    //if (x_lo!=0&&y_hi != gly)
         Kokkos::deep_copy(u_leftupout, Kokkos::subview(u,   std::make_pair(ghost, 2*ghost),std::make_pair(ly-2*ghost, ly-ghost)));
 
-    if (x_hi!=glx&&y_hi !=gly)
+    //if (x_hi!=glx&&y_hi !=gly)
         Kokkos::deep_copy(u_rightupout, Kokkos::subview(u,   std::make_pair(lx-2*ghost, lx-ghost),std::make_pair(ly-2*ghost, ly-ghost)));
 
     
@@ -242,63 +242,63 @@ void LBM::u_exchange()
 {
     int mar = 1;
 
-    if (x_lo != 0)
+    //if (x_lo != 0)
         MPI_Send(u_leftout.data(), u_leftout.size(), MPI_DOUBLE, comm.left, mar, comm.comm);
 
-    if (x_hi != glx)
+    //if (x_hi != glx)
         MPI_Recv(u_right.data(), u_right.size(), MPI_DOUBLE, comm.right, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 2;
-    if (x_hi != glx)
+    //if (x_hi != glx)
         MPI_Send(u_rightout.data(), u_rightout.size(), MPI_DOUBLE, comm.right, mar, comm.comm);
 
-    if (x_lo != 0)
+    //if (x_lo != 0)
         MPI_Recv(u_left.data(),u_left.size(), MPI_DOUBLE, comm.left, mar, comm.comm, MPI_STATUSES_IGNORE);
 
 
     mar = 3;
 
-    if (y_lo != 0)
+    //if (y_lo != 0)
         MPI_Send(u_downout.data(), u_downout.size(), MPI_DOUBLE, comm.down, mar, comm.comm);
 
-    if (y_hi != gly)
+   // if (y_hi != gly)
         MPI_Recv(u_up.data(), u_up.size(), MPI_DOUBLE, comm.up, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 4;
-    if (y_hi != gly)
+    //if (y_hi != gly)
         MPI_Send(u_upout.data(), u_upout.size(), MPI_DOUBLE, comm.up, mar, comm.comm);
 
-    if (y_lo != 0)
+   // if (y_lo != 0)
         MPI_Recv(u_down.data(),u_down.size(), MPI_DOUBLE, comm.down, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 5;
 
-    if (x_lo != 0&&y_lo!=0)
+   // if (x_lo != 0&&y_lo!=0)
         MPI_Send(u_leftdownout.data(), u_leftdownout.size(), MPI_DOUBLE, comm.leftdown, mar, comm.comm);
 
-    if (x_hi != glx&&y_hi!=gly)
+   // if (x_hi != glx&&y_hi!=gly)
         MPI_Recv(u_rightup.data(), u_rightup.size(), MPI_DOUBLE, comm.rightup, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 6;
-    if (x_hi != glx&&y_lo!=0)
+  //  if (x_hi != glx&&y_lo!=0)
         MPI_Send(u_rightdownout.data(), u_rightdownout.size(), MPI_DOUBLE, comm.rightdown, mar, comm.comm);
 
-    if (x_lo != 0&&y_hi!=gly)
+  //  if (x_lo != 0&&y_hi!=gly)
         MPI_Recv(u_leftup.data(),u_leftup.size(), MPI_DOUBLE, comm.leftup, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 7;
 
-    if (x_hi!=glx&&y_hi != gly)
+  //  if (x_hi!=glx&&y_hi != gly)
         MPI_Send(u_rightupout.data(), u_rightupout.size(), MPI_DOUBLE, comm.rightup, mar, comm.comm);
 
-    if (x_lo!=0&&y_lo != 0)
+  //  if (x_lo!=0&&y_lo != 0)
         MPI_Recv(u_leftdown.data(), u_leftdown.size(), MPI_DOUBLE, comm.leftdown, mar, comm.comm, MPI_STATUSES_IGNORE);
 
     mar = 8;
-    if (x_lo!=0&&y_hi != gly)
+  //  if (x_lo!=0&&y_hi != gly)
         MPI_Send(u_leftupout.data(), u_leftupout.size(), MPI_DOUBLE, comm.leftup, mar, comm.comm);
 
-    if (x_hi!=glx&&y_lo != 0)
+  //  if (x_hi!=glx&&y_lo != 0)
         MPI_Recv(u_rightdown.data(),u_rightdown.size(), MPI_DOUBLE, comm.rightdown, mar, comm.comm, MPI_STATUSES_IGNORE);
 
   
@@ -307,29 +307,29 @@ void LBM::u_exchange()
 
 void LBM::u_unpack(Kokkos::View<double **,Kokkos::CudaUVMSpace> u)
 {
-    if (x_lo != 0){
-        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(0, ghost), Kokkos::ALL), u_left);}
+   // if (x_lo != 0){
+        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(0, ghost), Kokkos::ALL), u_left);
 
-    if (x_hi != glx ){
-        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(lx-ghost, lx), Kokkos::ALL), u_right);}
+   // if (x_hi != glx ){
+        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(lx-ghost, lx), Kokkos::ALL), u_right);
 
-    if (y_lo != 0){
-        Kokkos::deep_copy(Kokkos::subview(u,  Kokkos::ALL, std::make_pair(0, ghost)), u_down);}
+ //   if (y_lo != 0){
+        Kokkos::deep_copy(Kokkos::subview(u,  Kokkos::ALL, std::make_pair(0, ghost)), u_down);
 
-    if (y_hi != gly ){
-        Kokkos::deep_copy(Kokkos::subview(u,  Kokkos::ALL, std::make_pair(ly-ghost, ly)), u_up);}
+  //  if (y_hi != gly ){
+        Kokkos::deep_copy(Kokkos::subview(u,  Kokkos::ALL, std::make_pair(ly-ghost, ly)), u_up);
 
-    if (x_lo != 0&&y_lo!=0){
-        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(0, ghost), std::make_pair(0, ghost)), u_leftdown);}
+ //   if (x_lo != 0&&y_lo!=0){
+        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(0, ghost), std::make_pair(0, ghost)), u_leftdown);
 
-    if (x_hi != glx&&y_lo!=0 ){
-        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(lx-ghost, lx), std::make_pair(0, ghost)), u_rightdown);}
+  //  if (x_hi != glx&&y_lo!=0 ){
+        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(lx-ghost, lx), std::make_pair(0, ghost)), u_rightdown);
 
-    if (x_lo!=0&&y_hi != gly){
-        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(0, ghost), std::make_pair(ly-ghost, ly)), u_leftup);}
+  // if (x_lo!=0&&y_hi != gly){
+        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(0, ghost), std::make_pair(ly-ghost, ly)), u_leftup);
 
-    if (x_hi!=glx&&y_hi != gly ){
-        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(lx-ghost, lx), std::make_pair(ly-ghost, ly)), u_rightup);}
+  //  if (x_hi!=glx&&y_hi != gly ){
+        Kokkos::deep_copy(Kokkos::subview(u,  std::make_pair(lx-ghost, lx), std::make_pair(ly-ghost, ly)), u_rightup);
     
 };
 

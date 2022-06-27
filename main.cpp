@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
         l1.MPIoutput(0);
         l1.setup_subdomain();
-        
+        l1.setup_u();
         for (int it = 1; it <= s1.Time; it++)
         {
 

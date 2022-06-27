@@ -41,14 +41,21 @@ struct CommHelper
 
         px = me % rx;
         py = (me / rx) % ry;
-        left = px == 0 ? -1 : me - 1;
-        leftup = (px == 0 || py == ry - 1) ? -1 : me - 1 + rx;
-        rightup = (px == rx - 1 || py == ry - 1) ? -1 : me + 1 + rx;
-        leftdown = (px == 0 || py == 0) ? -1 : me - 1 - rx;
-        rightdown = (px == rx - 1 || py == 0) ? -1 : me + 1 - rx;
-        right = px == rx - 1 ? -1 : me + 1;
-        down = py == 0 ? -1 : me - rx;
-        up = py == ry - 1 ? -1 : me + rx;
+
+        printf("rx=%d,ry=%d,px=%d,py=%d\n", rx, ry, px, py);
+
+        left = px == 0 ? me+rx-1 : me - 1;
+        right = px == rx - 1 ? me-rx+1 : me + 1;
+        down = py == 0 ? px+(ry-1)*rx : me - rx;
+        up = py == ry - 1 ? px : me + rx;
+                
+                
+        leftup = (py == ry - 1) ? left%rx : left + rx;
+        
+        rightup = (py == ry - 1) ? right%rx : right + rx;
+
+        leftdown = (py == 0) ? left%rx+(ry-1)*rx : left - rx;
+        rightdown = ( py == 0) ? right%rx+(ry-1)*rx : right - rx;
 
         printf("Me:%i MyNeibors: %i %i %i %i %i %i %i %i\n", me, left, right, up, down, leftup, leftdown, rightup, rightdown);
         MPI_Barrier(MPI_COMM_WORLD);

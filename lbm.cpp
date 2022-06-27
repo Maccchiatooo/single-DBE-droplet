@@ -154,7 +154,7 @@ void LBM::Collision()
 
 void LBM::Streaming()
 {
-    if (x_lo == 0){
+    /*if (x_lo == 0){
         Kokkos::parallel_for(
             "bc1", mdrange_policy2({0,ghost-1},{q,ly-ghost+1}), KOKKOS_CLASS_LAMBDA(const int ii,const int j) {
                 if(e(ii,0)>0){
@@ -182,7 +182,7 @@ void LBM::Streaming()
                 f(ii, i, ly - ghost) = f(bb(ii), i+e(ii,0), ly - ghost-1);}
             });
 
-    Kokkos::fence();
+    Kokkos::fence();*/
     Kokkos::parallel_for(
         "stream1", mdrange_policy3({0, ghost, ghost}, {q, lx - ghost, ly - ghost}), KOKKOS_CLASS_LAMBDA(const int ii, const int i, const int j) {
             f_tem(ii, i, j) = f(ii, i - e(ii, 0), j - e(ii, 1));
@@ -583,7 +583,7 @@ Kokkos::View<double**,Kokkos::CudaUVMSpace> LBM::laplace(Kokkos::View<double**,K
     typedef Kokkos::TeamPolicy<> team_policy;
     typedef Kokkos::TeamPolicy<>::member_type member_type;
 
-    if (x_lo == 0){
+    /*if (x_lo == 0){
         Kokkos::parallel_for(
             "bc1_", range_policy(ghost-1,ly-ghost+1), KOKKOS_CLASS_LAMBDA(const int j) {
                 c(ghost-1, j) = c(ghost+1,j);
@@ -611,7 +611,7 @@ Kokkos::View<double**,Kokkos::CudaUVMSpace> LBM::laplace(Kokkos::View<double**,K
             "bc4_", range_policy(ghost-1,lx-ghost+1), KOKKOS_CLASS_LAMBDA(const int i) {      
                 c(i, ly-ghost) = c(i,ly-ghost-2);
                 c(i, ly-ghost+1) = c(i,ly-ghost-3);
-            });}
+            });}*/
     Kokkos::parallel_for(
         "laplace", team_policy(ly-2*ghost, Kokkos::AUTO), KOKKOS_CLASS_LAMBDA(const member_type &team_member) {
             const int j = team_member.league_rank()+ghost;
@@ -640,7 +640,7 @@ Kokkos::View<double***,Kokkos::CudaUVMSpace> LBM::d_c(Kokkos::View<double**,Kokk
     typedef Kokkos::TeamPolicy<> team_policy;
     typedef Kokkos::TeamPolicy<>::member_type member_type;
 
-    if (x_lo == 0){
+    /*if (x_lo == 0){
         Kokkos::parallel_for(
             "bc1_", range_policy(ghost-1,ly-ghost+1), KOKKOS_CLASS_LAMBDA(const int j) {
                 c(ghost-1, j) = c(ghost+1,j);
@@ -664,7 +664,7 @@ Kokkos::View<double***,Kokkos::CudaUVMSpace> LBM::d_c(Kokkos::View<double**,Kokk
             "bc4_", range_policy(ghost-1,lx-ghost+1), KOKKOS_CLASS_LAMBDA(const int i) {      
                 c(i, ly-ghost) = c(i,ly-ghost-2);
 
-            });}
+            });}*/
 
     Kokkos::parallel_for(
         "dc", team_policy(ly-2*ghost, Kokkos::AUTO), KOKKOS_CLASS_LAMBDA(const member_type &team_member) {
@@ -701,7 +701,7 @@ Kokkos::View<double***,Kokkos::CudaUVMSpace> LBM::d_m(Kokkos::View<double**,Kokk
     typedef Kokkos::TeamPolicy<>::member_type member_type;
 
 
-    if (x_lo == 0){
+    /*if (x_lo == 0){
         Kokkos::parallel_for(
             "bc1__", range_policy(ghost-2,ly-ghost+2), KOKKOS_CLASS_LAMBDA(const int j) {
                 c(ghost-1, j) = c(ghost+1,j);
@@ -729,7 +729,7 @@ Kokkos::View<double***,Kokkos::CudaUVMSpace> LBM::d_m(Kokkos::View<double**,Kokk
                 c(i, ly-ghost) = c(i,ly-ghost-2);
                 c(i, ly-ghost+1) = c(i,ly-ghost-3);
 
-            });}
+            });}*/
 
     Kokkos::parallel_for(
         "dm", team_policy(ly-2*ghost, Kokkos::AUTO), KOKKOS_CLASS_LAMBDA(const member_type &team_member) {
